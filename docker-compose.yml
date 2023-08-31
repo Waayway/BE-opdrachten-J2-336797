@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html/
+      - ./.htaccess:/var/www/html/.htaccess
+  
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_USER=admin
+      - PMA_PASSWORD=admin
+      - PMA_PORT=3306
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mariadb:11
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: be-p4
+      MARIADB_USER: admin
+      MARIADB_PASSWORD: admin
+    volumes:
+      - /var/lib/mysql
+  
