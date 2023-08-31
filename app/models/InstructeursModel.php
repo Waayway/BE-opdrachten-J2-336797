@@ -38,10 +38,11 @@ class InstructeursModel
 
     public function getVoertuigenOf($id)
     {
-        $sql = "SELECT v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuiginstructeur vi 
+        $sql = "SELECT v.id, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuiginstructeur vi 
                 INNER JOIN voertuig v ON v.id = vi.voertuigID
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
-                WHERE vi.instructeurID = :id";
+                WHERE vi.instructeurID = :id
+                ORDER BY vt.rijbewijscategorie ASC;";
         $this->db->query($sql);
         $this->db->bindValue(":id", $id);
         return $this->db->resultSet();
@@ -51,7 +52,7 @@ class InstructeursModel
     {
         $sql =
             "INSERT INTO voertuiginstructeur (voertuigID, instructeurID, datumToekenning)
-             VALUES (:vId, :iId, sysdate())";
+            VALUES (:vId, :iId, sysdate())";
         $this->db->query($sql);
         $this->db->bindValue(":vId", $voertuigID);
         $this->db->bindValue(":iId", $instructeurID);
