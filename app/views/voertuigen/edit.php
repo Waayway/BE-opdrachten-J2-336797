@@ -8,7 +8,24 @@
     <link rel="stylesheet" href="<?= URLROOT ?>style.css">
 </head>
 <body>
-    <h1>Test</h1>
-    <?php var_dump($data);?>
+    <h1>Voertuig aanpasen</h1>
+    <form action="/voertuigen/edit" method="post">
+
+        <?php 
+    $ignore = [
+        "id" => "id",
+    ];
+    $obj = array_diff_key(get_object_vars($data["voertuig"]), $ignore);
+    
+    foreach ($obj as $key => $value) {
+        $name = ucfirst($key);
+        echo "<div>";
+        echo "<label for='$key'>$name</label>";
+        echo "<input type='text' name='$key' id='$key' value='$value'>";
+        echo "</div>";
+    }
+    
+    ?>
+    </form>
 </body>
 </html>
