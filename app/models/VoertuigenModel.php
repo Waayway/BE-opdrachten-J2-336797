@@ -23,12 +23,22 @@ class VoertuigenModel
 
     public function getVehicleById(int $id)
     {
-        $sql = "SELECT v.id, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuig v
+        $sql = "SELECT v.id, vi.instructeurID, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuig v
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
+                INNER JOIN voertuiginstructeur vi ON vi.voertuigID = v.id
                 WHERE v.id = :id";
 
         $this->db->query($sql);
         $this->db->bindValue(":id", $id);
         return $this->db->result();
+    }
+    public function getAllVehicleCategories() {
+        $sql = "SELECT * FROM typevoertuig";
+        $this->db->query($sql);
+        return $this->db->resultSet();
+    }
+    
+    public function updateVehicle(int $id, string $instructeur, string $typevoertuig, string $type, string $bouwjaar, string $brandstof, string $kenteken) {
+        
     }
 }
