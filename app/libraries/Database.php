@@ -22,7 +22,7 @@ class database
         }
     }
 
-    public function query($sql)
+    public function query(string $sql)
     {
         $this->statement = $this->dbHandler->prepare($sql);
     }

@@ -12,7 +12,7 @@ class VoertuigenModel
     public function getAllVehiclesAndCategory()
     {
         $sql =
-            "SELECT vt.id,vt.kenteken, vt.type, vt.bouwjaar, vt.brandstof, tv.typevoertuig, tv.rijbewijscategorie
+            "SELECT vt.id, vt.kenteken, vt.type, vt.bouwjaar, vt.brandstof, tv.typevoertuig, tv.rijbewijscategorie
             FROM voertuig vt
             INNER JOIN typevoertuig tv on vt.typevoertuigID = tv.id";
 
@@ -32,13 +32,39 @@ class VoertuigenModel
         $this->db->bindValue(":id", $id);
         return $this->db->result();
     }
-    public function getAllVehicleCategories() {
+    public function getAllVehicleCategories()
+    {
         $sql = "SELECT * FROM typevoertuig";
         $this->db->query($sql);
         return $this->db->resultSet();
     }
-    
-    public function updateVehicle(int $id, string $instructeur, string $typevoertuig, string $type, string $bouwjaar, string $brandstof, string $kenteken) {
-        
+
+    public function updateVehicle(int $id, int $instructeur, string $typevoertuig, string $type, string $bouwjaar, string $brandstof, string $kenteken)
+    {
+        $sql = "UPDATE voertuig SET 
+        type = :type,
+        typevoertuigID = :typevoertuig,
+        bouwjaar = :bouwjaar,
+        brandstof = :brandstof,
+        kenteken = :kenteken 
+        WHERE id = :id";
+        $this->db->query($sql);
+
+        $this->db->bindValue(":typevoertuig", $typevoertuig);
+        $this->db->bindValue(":type", $type);
+        $this->db->bindValue(":bouwjaar", $bouwjaar);
+        $this->db->bindValue(":brandstof", $brandstof);
+        $this->db->bindValue(":kenteken", $kenteken);
+        $this->db->bindValue(":id", $id);
+
+        $this->db->execute();
+
+        $sql = "UPDATE voertuiginstructeur SET 
+        instructeurID = :instructeur 
+        WHERE voertuigID = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":instructeur", $instructeur);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
     }
 }
