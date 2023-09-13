@@ -14,7 +14,10 @@ class VoertuigenModel
         $sql =
             "SELECT vt.id, vt.kenteken, vt.type, vt.bouwjaar, vt.brandstof, tv.typevoertuig, tv.rijbewijscategorie
             FROM voertuig vt
-            INNER JOIN typevoertuig tv on vt.typevoertuigID = tv.id";
+            INNER JOIN typevoertuig tv on vt.typevoertuigID = tv.id
+            LEFT JOIN voertuiginstructeur vi on vt.id = vi.voertuigID
+            WHERE vi.voertuigID IS NULL;
+            ";
 
         $this->db->query($sql);
 
@@ -23,7 +26,7 @@ class VoertuigenModel
 
     public function getVehicleById(int $id)
     {
-        $sql = "SELECT v.id, vi.instructeurID, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuig v
+        $sql = "SELECT v.id, vi.instructeurID, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie, v.typevoertuigID FROM voertuig v
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
                 INNER JOIN voertuiginstructeur vi ON vi.voertuigID = v.id
                 WHERE v.id = :id";
@@ -53,7 +56,7 @@ class VoertuigenModel
         $this->db->bindValue(":typevoertuig", $typevoertuig);
         $this->db->bindValue(":type", $type);
         $this->db->bindValue(":bouwjaar", $bouwjaar);
-        $this->db->bindValue(":brandstof", $brandstof);
+        $this->db->bindValue(":brandstof", ucfirst($brandstof));
         $this->db->bindValue(":kenteken", $kenteken);
         $this->db->bindValue(":id", $id);
 

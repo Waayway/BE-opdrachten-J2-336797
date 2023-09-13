@@ -1,21 +1,37 @@
 -- ##################
 -- Door: Thijs van Waaij
 -- ##################
--- - Step 1; Create a new Database
 DROP DATABASE IF EXISTS `be-p4`;
 
 CREATE DATABASE IF NOT EXISTS `be-p4`;
 
 -- * Use Database for inserting;
-USE `be-p4-opdr-1`;
+USE `be-p4`;
+
+-- - Step 1 Drop all tables
+
+DROP TABLE IF EXISTS examenPerExaminator;
+DROP TABLE IF EXISTS examen;
+DROP TABLE IF EXISTS examinator;
+DROP TABLE IF EXISTS lespakketleerling;
+DROP TABLE IF EXISTS leerling;
+DROP TABLE IF EXISTS lespakket;
+DROP TABLE IF EXISTS voertuiginstructeur;
+DROP TABLE IF EXISTS instructeurs;
+DROP TABLE IF EXISTS voertuig;
+DROP TABLE IF EXISTS typevoertuig;
 
 -- - Step 2: create new table typevoertuig.
-DROP TABLE IF EXISTS typevoertuig;
 
 CREATE TABLE IF NOT EXISTS typevoertuig (
     id                  TINYINT UNSIGNED    NOT NULL AUTO_INCREMENT,
     typevoertuig        VARCHAR(100)        NOT NULL,
     rijbewijscategorie  VARCHAR(3)          NOT NULL,
+
+    isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT          PK_typevoertuig_Id  PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
@@ -33,7 +49,7 @@ VALUES
 
 -- - Step 4: Create new table voertuig
 
-DROP TABLE IF EXISTS voertuig;
+
 
 CREATE TABLE IF NOT EXISTS voertuig (
     id              TINYINT UNSIGNED    NOT NULL    AUTO_INCREMENT,
@@ -42,6 +58,12 @@ CREATE TABLE IF NOT EXISTS voertuig (
     bouwjaar        DATE                NOT NULL,
     brandstof       VARCHAR(15)         NOT NULL,
     typevoertuigID  TINYINT UNSIGNED    NOT NULL,
+
+    isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    
     CONSTRAINT      PK_voertuig_Id      PRIMARY KEY CLUSTERED(id),
     CONSTRAINT      FK_typevoertuigID   FOREIGN KEY (typevoertuigID) REFERENCES typevoertuig (id)
 ) ENGINE=InnoDB;
@@ -72,7 +94,7 @@ VALUES
 
 -- - Step 6 Create table instructeurs
 
-DROP TABLE IF EXISTS instructeurs;
+
 
 CREATE TABLE IF NOT EXISTS instructeurs (
     id              TINYINT UNSIGNED    NOT NULL    AUTO_INCREMENT,
@@ -82,6 +104,12 @@ CREATE TABLE IF NOT EXISTS instructeurs (
     telefoon        CHAR(12)            NOT NULL,
     datumInDienst   DATE                NOT NULL,
     aantalSterren   TINYINT UNSIGNED    NULL,
+
+isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT PK_instructeursID PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
 
@@ -102,13 +130,15 @@ INSERT INTO instructeurs (
 ("Mohammed",  "El",    "Yassidi",   "06-34291234", "2010-06-14", 5);
 
 -- - Step 8 Create linking table voertuig-instructeur
-DROP TABLE IF EXISTS voertuiginstructeur;
+
+
 
 CREATE TABLE IF NOT EXISTS voertuiginstructeur (
     id              TINYINT UNSIGNED            NOT NULL    AUTO_INCREMENT,
     voertuigID      TINYINT UNSIGNED            NOT NULL,
     instructeurID   TINYINT UNSIGNED            NOT NULL,
     datumToekenning DATE                        NOT NULL,
+
     CONSTRAINT      PK_voertuiginstructeurID    PRIMARY KEY CLUSTERED(id),
     CONSTRAINT      FK_voertuigID    FOREIGN KEY (voertuigID)    REFERENCES voertuig    (id),
     CONSTRAINT      FK_instructeurID FOREIGN KEY (instructeurID) REFERENCES instructeurs(id)
@@ -137,6 +167,12 @@ CREATE TABLE IF NOT EXISTS lespakket (
     aantalLessen        TINYINT UNSIGNED    NOT NULL,
     rijbewijscategorie  VARCHAR(2)          NOT NULL,
     prijs               DECIMAL(6,2)        NOT NULL,
+
+    isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT PK_lespakketID PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
 
@@ -163,6 +199,12 @@ voornaam            VARCHAR(50)         NOT NULL,
 tussenvoegsel       VARCHAR(10)         NULL,
 achternaam          VARCHAR(50)         NOT NULL,
 mobiel              CHAR(12)            NOT NULL,
+
+isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
 CONSTRAINT PK_leerlingID PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
 
@@ -190,6 +232,12 @@ CREATE TABLE IF NOT EXISTS lespakketleerling (
     leerlingID              TINYINT UNSIGNED    NOT NULL,
     startdatumrijlessen     DATE                NOT NULL,
     datumrijbewijsgehaald   DATE                NULL,
+
+    isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT PK_lespakketleerlingID PRIMARY KEY CLUSTERED(id),
     CONSTRAINT FK_lespakketID FOREIGN KEY (lespakketID) REFERENCES lespakket(id),
     CONSTRAINT FK_leerlingID FOREIGN KEY (leerlingID) REFERENCES leerling(id)
@@ -223,6 +271,12 @@ CREATE TABLE IF NOT EXISTS examinator (
     tussenvoegsel      VARCHAR(10)         NULL,
     achternaam         VARCHAR(50)         NOT NULL,
     mobiel             CHAR(11)            NOT NULL,
+
+isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT PK_examinatorID PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
 
@@ -244,6 +298,12 @@ CREATE TABLE IF NOT EXISTS examen (
     rijbewijscategorie VARCHAR(2)          NOT NULL,
     datum              DATE                NOT NULL,
     uitslag            BOOLEAN             NOT NULL,
+
+    isActive            BOOLEAN             NOT NULL DEFAULT true,
+    notice              VARCHAR(255)        NULL,
+    created_date        DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    modified_date       DATETIME            NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
     CONSTRAINT PK_examenID PRIMARY KEY CLUSTERED(id)
 ) ENGINE=InnoDB;
 

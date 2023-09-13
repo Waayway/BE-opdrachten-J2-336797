@@ -14,6 +14,8 @@ class Voertuigen extends BaseController {
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id = $_POST["id"];
                 $this->edit_post($id);
+                $instruc_id = $_POST["instructeur"];
+                header("Location: /instructeurs/voertuigen/$instruc_id");
             } else {
                 header("Location: /home/index");
             }
