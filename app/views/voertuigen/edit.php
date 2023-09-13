@@ -12,11 +12,10 @@
     <form action="/voertuigen/edit" method="post">
         <div>
             <label for="instructeur">Instructeur:</label>
-            <select name="instructeur" id="instructeur" >
+            <select name="instructeur" id="instructeur">
+                <option value="null">[Geen instructeur]</option>
                 <?php 
                 foreach ($data["instructeurs"] as $row) {
-                    echo $row->id;
-                    echo $data["voertuig"]->instructeurID;
                     $selected = $row->id == $data["voertuig"]->instructeurID ? "selected" :"";
                     echo "<option value='$row->id' $selected>$row->voornaam $row->tussenvoegsel $row->achternaam</option>";
                 }

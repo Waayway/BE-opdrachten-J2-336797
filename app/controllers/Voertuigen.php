@@ -13,9 +13,16 @@ class Voertuigen extends BaseController {
         if ($id == null) {
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id = $_POST["id"];
+                if ($_POST["instructeur"] == "null") {
+                    $_POST["instructeur"] = null;
+                }
                 $this->edit_post($id);
                 $instruc_id = $_POST["instructeur"];
-                header("Location: /instructeurs/voertuigen/$instruc_id");
+                if ($instruc_id == null) {
+                    header("Location: /");
+                } else {
+                    header("Location: /instructeurs/voertuigen/$instruc_id");
+                }
             } else {
                 header("Location: /home/index");
             }
@@ -27,7 +34,6 @@ class Voertuigen extends BaseController {
             "instructeurs" => $this->instructeursModel->getInstructeurs(),
             "typevoertuigen" => $this->voertuigenModel->getAllVehicleCategories()
         ];
-        
         $this->view("voertuigen/edit", $data);
     }
     private function edit_post(int $id) {

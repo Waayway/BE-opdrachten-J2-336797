@@ -28,7 +28,7 @@ class VoertuigenModel
     {
         $sql = "SELECT v.id, vi.instructeurID, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie, v.typevoertuigID FROM voertuig v
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
-                INNER JOIN voertuiginstructeur vi ON vi.voertuigID = v.id
+                LEFT JOIN voertuiginstructeur vi ON vi.voertuigID = v.id
                 WHERE v.id = :id";
 
         $this->db->query($sql);
@@ -42,7 +42,7 @@ class VoertuigenModel
         return $this->db->resultSet();
     }
 
-    public function updateVehicle(int $id, int $instructeur, string $typevoertuig, string $type, string $bouwjaar, string $brandstof, string $kenteken)
+    public function updateVehicle(int $id, int|null $instructeur, string $typevoertuig, string $type, string $bouwjaar, string $brandstof, string $kenteken)
     {
         $sql = "UPDATE voertuig SET 
         type = :type,
@@ -62,11 +62,34 @@ class VoertuigenModel
 
         $this->db->execute();
 
+        if ($instructeur == null) return;
+        $sql = "SELECT * FROM voertuiginstructeur WHERE voertuigID = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        $result = $this->db->resultSet();
+
+        if (sizeof($result) < 1) {
+            $this->bindVoertuigToInstructeur($id, $instructeur);
+        } else {
+            $this->updateVoertuigInstructeur($id, $instructeur);
+        }
+    }
+
+    private function updateVoertuigInstructeur(int $id, int $iid)
+    {
         $sql = "UPDATE voertuiginstructeur SET 
         instructeurID = :instructeur 
         WHERE voertuigID = :id";
         $this->db->query($sql);
-        $this->db->bindValue(":instructeur", $instructeur);
+        $this->db->bindValue(":instructeur", $iid);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
+    }
+    private function bindVoertuigToInstructeur(int $id, int $iid)
+    {
+        $sql = "INSERT INTO voertuiginstructeur (voertuigID, instructeurID) VALUES (:id, :instructeur)";
+        $this->db->query($sql);
+        $this->db->bindValue(":instructeur", $iid);
         $this->db->bindValue(":id", $id);
         $this->db->execute();
     }

@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS voertuiginstructeur (
     id              TINYINT UNSIGNED            NOT NULL    AUTO_INCREMENT,
     voertuigID      TINYINT UNSIGNED            NOT NULL,
     instructeurID   TINYINT UNSIGNED            NOT NULL,
-    datumToekenning DATE                        NOT NULL,
+    datumToekenning DATE                        NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT      PK_voertuiginstructeurID    PRIMARY KEY CLUSTERED(id),
     CONSTRAINT      FK_voertuigID    FOREIGN KEY (voertuigID)    REFERENCES voertuig    (id),
