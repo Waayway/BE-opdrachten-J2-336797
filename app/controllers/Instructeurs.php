@@ -24,6 +24,7 @@ class Instructeurs extends BaseController
             "instructeur" => $this->instructeurModel->getInstructeur($id),
             "voertuigen"  => $this->instructeurModel->getVoertuigenOf($id),
             "geen_voertuigen" => "",
+            "deleted" => $_GET["deleted"] ?? null
         ];
         if (sizeof($data["voertuigen"]) < 1) {
             $data["geen_voertuigen"] = "Er zijn op dit moment nog geen voertuigen toegewezen aan deze instructeur<br>";
@@ -42,7 +43,8 @@ class Instructeurs extends BaseController
         $data = [
             "instructeur" => $this->instructeurModel->getInstructeur($id),
             "voertuigen"  => $this->voertuigenModel->getAllVehiclesAndCategory(),
-            "extra" => $extra_data
+            "extra" => $extra_data,
+            "deleted" => $_GET["deleted"] ?? null
         ];
         $this->view("instructeurs/toevoegen", $data);
     }

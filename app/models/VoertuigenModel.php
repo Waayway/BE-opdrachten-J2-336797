@@ -74,6 +74,18 @@ class VoertuigenModel
             $this->updateVoertuigInstructeur($id, $instructeur);
         }
     }
+    public function deleteVehicle(int $id)
+    {
+        $sql = "DELETE FROM voertuiginstructeur WHERE voertuigID = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
+
+        $sql = "DELETE FROM voertuig WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
+    }
 
     private function updateVoertuigInstructeur(int $id, int $iid)
     {

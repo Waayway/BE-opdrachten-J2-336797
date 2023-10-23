@@ -70,4 +70,12 @@ class InstructeursModel
         $res = $this->db->result();
         return $res->num > 0;
     }
+    public function getInstructeurFromVoertuigId(int $id) {
+        $sql = "SELECT ins.id, ins.voornaam, ins.tussenvoegsel, ins.achternaam, ins.datumInDienst, ins.aantalSterren FROM instructeurs ins
+                INNER JOIN voertuiginstructeur vi ON vi.instructeurID = ins.id
+                WHERE vi.voertuigID = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        return $this->db->result();
+    }
 }

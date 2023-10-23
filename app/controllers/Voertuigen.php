@@ -36,6 +36,16 @@ class Voertuigen extends BaseController {
         ];
         $this->view("voertuigen/edit", $data);
     }
+    public function delete(int $id) {
+        $ins_id = $_GET["ins"];
+        $this->voertuigenModel->deleteVehicle($id);
+        if ($_GET["type"] != "toevoegen") {
+            header("Location: /instructeurs/voertuigen/$ins_id?deleted=true");
+        } else {
+            header("Location: /instructeurs/toevoegen/$ins_id?deleted=true");
+        }
+    }
+
     private function edit_post(int $id) {
         $this->voertuigenModel->updateVehicle(
             $id,
