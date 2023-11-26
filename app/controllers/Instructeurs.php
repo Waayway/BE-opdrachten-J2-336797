@@ -63,6 +63,7 @@ class Instructeurs extends BaseController
         }
 
         $this->instructeurModel->toggleInstructeurZiek($instructeurID);
-        header("Location: " . URLROOT . "instructeurs");
+        header("Refresh: 3; url=" . URLROOT . "instructeurs");
+        echo "Instructeur is ziek gemeld!";
     }
 }

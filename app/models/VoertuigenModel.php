@@ -16,7 +16,8 @@ class VoertuigenModel
             FROM voertuig vt
             INNER JOIN typevoertuig tv on vt.typevoertuigID = tv.id
             LEFT JOIN voertuiginstructeur vi on vt.id = vi.voertuigID
-            WHERE vi.voertuigID IS NULL;
+            WHERE vi.voertuigID IS NULL OR
+            (SELECT isActive FROM instructeurs ins WHERE ins.id = vi.instructeurID) = 0;
             ";
 
         $this->db->query($sql);

@@ -38,7 +38,14 @@ class InstructeursModel
 
     public function getVoertuigenOf($id)
     {
-        $sql = "SELECT v.id, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuiginstructeur vi 
+        $sql = "SELECT v.id, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie, 
+                (
+                    SELECT COUNT(*) 
+                    FROM voertuiginstructeur vi
+                    INNER JOIN instructeurs ins ON ins.id = vi.instructeurID
+                    WHERE vi.voertuigID = v.id AND ins.isActive = 1
+                ) AS toegewezenAantal
+                FROM voertuiginstructeur vi 
                 INNER JOIN voertuig v ON v.id = vi.voertuigID
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
                 WHERE vi.instructeurID = :id AND

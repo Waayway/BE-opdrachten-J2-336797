@@ -28,6 +28,7 @@
                 <th>Brandstof</th>
                 <th>Rijbewijscategorie</th>
                 <th>Wijzigen</th>
+                <th>Toegewezen</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
                             </svg>
                         </a>
                     </td>
+                    <td><?= $row->toegewezenAantal > 1 ? "✔" : "✖" ?></td>
                 </tr>
             <?php
             }
