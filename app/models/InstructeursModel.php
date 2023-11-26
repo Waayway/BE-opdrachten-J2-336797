@@ -41,7 +41,8 @@ class InstructeursModel
         $sql = "SELECT v.id, v.kenteken, v.type, v.bouwjaar, v.brandstof, vt.typevoertuig, vt.rijbewijscategorie FROM voertuiginstructeur vi 
                 INNER JOIN voertuig v ON v.id = vi.voertuigID
                 INNER JOIN typevoertuig vt ON vt.id = v.typevoertuigID
-                WHERE vi.instructeurID = :id
+                WHERE vi.instructeurID = :id AND
+                (SELECT isActive FROM instructeurs ins WHERE ins.id = vi.instructeurID) = 1
                 ORDER BY vt.rijbewijscategorie ASC;";
         $this->db->query($sql);
         $this->db->bindValue(":id", $id);
