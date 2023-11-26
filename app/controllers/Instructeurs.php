@@ -57,4 +57,12 @@ class Instructeurs extends BaseController
             return ["success" => "Het voertuig is al van de instructeur!"];
         }
     }
+    public function ziek($instructeurID = null) {
+        if ($instructeurID == null) {
+            return;
+        }
+
+        $this->instructeurModel->toggleInstructeurZiek($instructeurID);
+        header("Location: " . URLROOT . "instructeurs");
+    }
 }

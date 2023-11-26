@@ -78,4 +78,10 @@ class InstructeursModel
         $this->db->bindValue(":id", $id);
         return $this->db->result();
     }
+    public function toggleInstructeurZiek(int $instructeurId) {
+        $sql = "UPDATE instructeurs SET isActive = NOT isActive WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $instructeurId);
+        $this->db->execute();
+    }
 }
