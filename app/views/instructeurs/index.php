@@ -24,6 +24,7 @@
                 <th>Aantal sterren</th>
                 <th>Voertuigen</th>
                 <th>Ziekte/Verlof</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +44,14 @@
                     <td><a style="text-decoration: none;" href="<?= URLROOT ?>instructeurs/ziek/<?= $row->id ?>">
                     <?= $row->isActive ? "👍" : "🩹" ?>
                     </a></td>
+                    <td>
+                        <?php if($row->isActive) { ?>
+                            <form action="<?= URLROOT ?>instructeurs/delete" method="post">
+                                <input type="hidden" name="id" value="<?= $row->id ?>">
+                                <input type="submit" value="❌" />    
+                            </form>
+                        <?php } ?>
+                    </td>
                 </tr>
             <?php
             }

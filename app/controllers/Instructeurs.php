@@ -66,4 +66,8 @@ class Instructeurs extends BaseController
         header("Refresh: 3; url=" . URLROOT . "instructeurs");
         echo "Instructeur is ziek gemeld!";
     }
+    public function delete() {
+        $this->instructeurModel->deleteInstructeur($_POST["id"]);
+        header("Location: " . URLROOT . "instructeurs");
+    }
 }

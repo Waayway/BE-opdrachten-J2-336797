@@ -92,4 +92,12 @@ class InstructeursModel
         $this->db->bindValue(":id", $instructeurId);
         $this->db->execute();
     }
+
+    public function deleteInstructeur(int $id)
+    {
+        $sql = "DELETE FROM instructeurs WHERE id = :id";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
+    }
 }
