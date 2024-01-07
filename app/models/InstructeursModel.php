@@ -95,6 +95,13 @@ class InstructeursModel
 
     public function deleteInstructeur(int $id)
     {
+        $sql = "DELETE FROM voertuiginstructeur WHERE instructeurID in (
+                    SELECT id FROM instructeurs WHERE id = :id
+                )";
+        $this->db->query($sql);
+        $this->db->bindValue(":id", $id);
+        $this->db->execute();
+
         $sql = "DELETE FROM instructeurs WHERE id = :id";
         $this->db->query($sql);
         $this->db->bindValue(":id", $id);
