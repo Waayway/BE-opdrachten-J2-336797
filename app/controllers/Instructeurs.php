@@ -67,7 +67,8 @@ class Instructeurs extends BaseController
         echo "Instructeur is ziek gemeld!";
     }
     public function delete() {
+        header("Refresh: 3; url=" . URLROOT . "instructeurs");
         $this->instructeurModel->deleteInstructeur($_POST["id"]);
-        header("Location: " . URLROOT . "instructeurs");
+        echo "Instructeur Mohammed El Yassidi is definitief verwijdert en al zijn eerder toegewezen voertuigen zijn vrijgegeven";
     }
 }
